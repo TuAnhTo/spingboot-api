@@ -14,11 +14,11 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public List<Customer> findAll() {
         Iterable<Customer> iterable= customerRepository.findAll();
-        List<Customer> list = new ArrayList<>();
-        for (Customer c : iterable) {
-            list.add(c);
+        List<Customer> listCustomer = new ArrayList<>();
+        for (Customer customer : iterable) {
+            listCustomer.add(customer);
         }
-        return list;
+        return listCustomer;
     }
 
     @Override

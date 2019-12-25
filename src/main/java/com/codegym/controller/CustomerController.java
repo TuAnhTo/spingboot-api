@@ -16,6 +16,7 @@ import java.util.List;
 public class CustomerController {
     @Autowired
     public CustomerService customerService;
+
     @RequestMapping(value = "/customers/", method = RequestMethod.GET)
     public ResponseEntity<List<Customer>> listAllCustomers() {
         List<Customer> customers = customerService.findAll();
@@ -24,6 +25,9 @@ public class CustomerController {
         }
         return new ResponseEntity<List<Customer>>(customers, HttpStatus.OK);
     }
+
+
+
     @RequestMapping(value = "/customers/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Customer> getCustomer(@PathVariable("id") long id) {
         System.out.println("Fetching Customer with id " + id);
@@ -34,14 +38,21 @@ public class CustomerController {
         }
         return new ResponseEntity<Customer>(customer, HttpStatus.OK);
     }
+
+
+
+
     @RequestMapping(value = "/customers/", method = RequestMethod.POST)
-    public ResponseEntity<Void> createCustomer(@RequestBody Customer customer, UriComponentsBuilder ucBuilder) {
-        System.out.println("Creating Customer " + customer.getLastName());
+    public ResponseEntity<Void> createCustomer(@RequestBody Customer customer, UriComponentsBuilder uriComponentsBuilder) {
+        System.out.println("Creating Customer "  + customer.getFirstName() + customer.getLastName());
         customerService.save(customer);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(ucBuilder.path("/customers/{id}").buildAndExpand(customer.getId()).toUri());
-        return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setLocation(uriComponentsBuilder.path("/customers/{id}").buildAndExpand(customer.getId()).toUri());
+        return new ResponseEntity<Void>(httpHeaders, HttpStatus.CREATED);
     }
+
+
+
     @RequestMapping(value = "/customers/{id}", method = RequestMethod.PUT)
     public ResponseEntity<Customer> updateCustomer(@PathVariable("id") long id, @RequestBody Customer customer) {
         System.out.println("Updating Customer " + id);
@@ -60,6 +71,10 @@ public class CustomerController {
         customerService.save(currentCustomer);
         return new ResponseEntity<Customer>(currentCustomer, HttpStatus.OK);
     }
+
+
+
+
     @RequestMapping(value = "/customers/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<Customer> deleteCustomer(@PathVariable("id") long id) {
         System.out.println("Fetching & Deleting Customer with id " + id);
